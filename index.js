@@ -45,17 +45,17 @@ const banking= new mongoose.Schema({
 const Banking=mongoose.model('Banking',banking);
 
 app.get("/", async(req,res)=>{
-    res.sendFile(__dirname+"/public/src/home.html");
+    res.sendFile(__dirname+"/views/home.html");
 })
 
 app.get("/dashboard",async (req,res)=>{
     const uname=req.query.name;
     if(req.session.user){
-        res.sendFile(__dirname+"/public/src/dashboard.html");
+        res.sendFile(__dirname+"/views/dashboard.html");
     }
     else{
         req.session.user=uname;
-        res.sendFile(__dirname+"/public/src/dashboard.html");
+        res.sendFile(__dirname+"/views/dashboard.html");
     }
 })
 
@@ -80,11 +80,11 @@ app.get("/logout",(req,res)=>{
 })
 
 app.get("/signup",(req,res)=>{
-    res.sendFile(__dirname+"/public/src/signup.html");
+    res.sendFile(__dirname+"/views/signup.html");
 })
 
 app.get("/login", (req,res)=>{
-    res.sendFile(__dirname+"/public/src/login.html");
+    res.sendFile(__dirname+"/views/login.html");
 })
 
 
