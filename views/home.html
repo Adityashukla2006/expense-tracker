@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceFlow - Smart Finance Management</title>
+    <link href="/styles.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">FinanceFlow</div>
+        <div class="nav-links">
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">About us</a>
+        </div>
+        <div class="auth-buttons">
+            <a href="#" class="sign-in" onclick="goToLogin()">Sign In</a>
+            <a href="#" class="get-started" onclick="goToSignUp()">Get Started</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Smart Finance Management for the Digital Age</h1>
+                <p>Take control of your financial future. Track expenses, set budgets, and achieve your goals with ease.</p>
+                <a href="#" class="learn-more">Learn More ></a>
+            </div>
+            <div class="dashboard-preview">
+                <div class="dashboard-header">
+                    <h3>Dashboard Overview</h3>
+                    <span>This Month ▼</span>
+                </div>
+                <div class="box">
+                    <div class="icon">
+                        💰
+                    </div>
+                    <div><p style="margin-bottom: 9px; font-size: medium;">Total Balance</p>
+                        <p style="font-weight: 750; font-size: large; text-align: center;">$24,500.00</p></div>
+                    <div class="perc">+12.5%</div>
+                </div>
+                <div class="box">
+                    <div class="icon">
+                        ⏰
+                    </div>
+                    <div>
+                    <p style="margin-bottom: 9px; font-size: medium;">Monthly Savings</p>
+                    <p style="font-weight:750; font-size: large; text-align: center;">$3,250.00</p>
+                    </div>
+                    <div class="perc">+8.2%</div>
+                </div>
+                <div class="expense-breakdown">
+                   <div class="heading">
+                    <div>
+                        <h3>Expense Breakdown</h3>
+                    </div>
+                    <div>
+                        This Month ▼
+                    </div>
+                   </div>
+                    <div class="expense-item">
+                        <span>Housing</span>
+                        <span>$1,200.00</span>
+                        </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 40%;"></div>
+                    </div>
+                    <div class="expense-item">
+                        <span>Transport</span>
+                        <span>$400.00</span>
+                        </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 20%;"></div>
+                    </div>
+                    <div class="expense-item">
+                        <span class="item">Food</span>
+                        <span>$350.00</span>
+                        </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 15%;"></div>
+                    </div>
+                    <div class="expense-item">
+                        <div>
+                            <p id="updated">Updated just now</p>
+                        </div>
+                        <div>
+                            <p id="report">View full report</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToSignUp(){
+            window.location.href="/signup";
+        }
+
+        function goToLogin(){
+            window.location.href="/login";
+        }
+    </script>
+</body>
+</html>

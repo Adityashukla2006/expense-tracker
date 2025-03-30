@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Agdasima&display=swap" rel="stylesheet">
+
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        .empty{
+            width: 100%;
+            height: 140px;
+        }
+
+        body{
+            background-image: url('../image\ 11.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .left-section{
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+        }
+
+        .l-text{
+            width: 70%;
+            margin: 10px;
+        }
+
+        .container{
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            padding: 0 5%;
+            height: 100vh;
+        }
+
+        .right-section{
+            border-radius: 15px;
+            width: 40%;
+            height: 75vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #171A23;
+        }
+        .item{
+            width: 100%;
+            margin: 10px;
+        }
+
+        .form-container {
+            margin: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centers the form content vertically */
+            align-items: center; /* Centers the form content horizontally */
+            width: 100%;
+        }
+
+        form {
+            width: 100%; 
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        table{
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #A0A0A0;
+        }
+
+        h2{
+            margin-bottom: 10px;
+        }
+
+        p{
+            margin: 0;
+        }
+
+        img{
+            width: 25px;
+            height: 25px;
+        }
+
+        .timepass{
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        h1{
+            position: relative;
+            top: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        FinanceFlow
+    </h1>
+    <div class="container">
+        <div class="left-section">
+            <div class="l-heading">
+                <p style="font-family: 'Agdasima'; font-size: 60px; margin-bottom: 20px; font-weight: 600;">Start your 14-day free trial</h2>
+            </div>
+            <div class="l-text">
+               <div class="timepass"><img src="../users-03.png"><h3>Invite unlimited colleagues</h3></div>
+                <p>Integrate with guaranteed developer-friendly APIs or openly to choose a build-ready or low-code solution.</p>
+            </div>
+            <div class="l-text">
+                <div class="timepass"><img src="../check-verified-02.png"><h3>Ensure compliance</h3></div>
+                <p>Receive detailed insights on all your numbers in real-time, see where visitors are coming from.</p>
+            </div>
+            <div class="l-text">
+                <div class="timepass"><img src="../shield-zap.png"><h3>Built-in Security</h3></div>
+                <p>Keep your team members and customers in the loop by sharing your dashboard public.</p>
+            </div>
+        </div>
+        <div class="right-section">
+            <div class="item" style="text-align: center;"><h2>Create an account</h2></div>
+            <div class="item form-container">
+                <form action="/submit" method="post">
+                    <table>
+                        <tr>
+                            <td>First Name</td>
+                            <td>Phone Number</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" placeholder="First Name" name="name">
+                            </td>
+                            <td>
+                                <input type="text" placeholder="Phone Number" name="phonenumber">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Username</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="text" placeholder="Username" name="username">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="text" placeholder="Email" name="email">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Password</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="password" placeholder="Password" name="password">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="submit" value="Sign Up">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="item" style="text-align: center; color: gray; font-size: small;">
+                <p>By creating an account, you agree to the Terms of Service. We'll occasionally send you account-related emails.</p>
+            </div>
+            <div class="item" style="text-align: center;">
+                <p style="font-size: small;">Already have an account?</p><p style="margin-top: 10px;"><a href="../src/login.html">Login</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

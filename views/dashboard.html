@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            background-image: url('../image\ 11.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            height: 100vh;
+        }
+
+        .container{
+            display:flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .item{
+            width: 30%;
+            background-color: #171A23;
+            border: 2px solid white;
+            height: 20vh;
+            border-radius: 10px;
+        }
+        
+        .header{
+            position: static;
+            top: 0;
+            left: 0;
+            margin-bottom: 80px;
+        }
+
+        .bottom-container{
+            display: grid;
+            gap: 20px;
+            height: 60vh;
+            
+        }
+
+        .g{
+            background-color: #171A23;
+            border: 2px solid white;
+            border-radius: 10px;
+        }
+
+        .item1{
+            grid-column-start: 1;
+            grid-column-end: 2;
+            grid-row-start: 1;
+            grid-row-end: 3;
+        }
+
+        .item2{ 
+            grid-column-start: 2;
+            grid-column-end: 3;
+            grid-row-start: 1;
+            grid-row-end: 2;
+        }
+
+        .item3{
+            grid-column-start: 2;
+            grid-column-end: 3;
+            grid-row-start: 2;
+            grid-row-end: 3;
+        }
+
+        .item4{
+            grid-column-start: 3;
+            grid-column-end: 4;
+            grid-row-start: 1;
+            grid-row-end: 3;
+        }
+
+        .cheading{
+            display: flex;
+            justify-content: space-around;
+            height: 20%;
+            width: 100%;
+        }
+
+        .selectbox{
+            margin: 1em;
+        }
+
+        .icon{
+            width: 50px;
+            height: 50px;
+            background-color: #0f252f;
+            border-radius: 10px;
+            margin: 1em;
+        }
+
+        .cbottom{
+            display: flex;
+            justify-content: space-around;
+            height: 60%;
+            width: 60%;
+        }
+
+        .balance{
+            margin: 0.75em;
+            font-size: xx-large  ;
+        }
+
+    </style>
+</head>
+<script>
+    async function fetchData(){
+        const data = await fetch('http://localhost:3000/getdetails');
+        const adata= await data.json();
+        let pdata = Array.isArray(adata) ? adata[0] : adata;
+        
+        document.getElementById("budget").textContent= "$ "+pdata.budget;
+        document.getElementById("balance").textContent= "$ "+pdata.balance;
+        document.getElementById("expense").textContent= "$ "+pdata.expense;
+    }
+    window.onload=fetchData;
+</script>
+<body>
+    <header class="header">
+        <h1>FinanceFlow</h1>
+    </header>
+    <div class="container">
+        <div class="item">
+            <div class="cheading">
+                <div><h3>Total Balance</h3></div>
+                <div class="selectbox">
+                    <select style="background-color: gray; border-radius: 5px; height: 25px;">
+                        <option>All Time</option>
+                        <option>Last 6 months</option>
+                        <option>Last year</option>
+                    </select>
+                </div>
+            </div>
+            <br><hr>
+            <div class="cbottom">
+                <div class="icon"></div>
+                <div class="balance" id="balance" name="balance"></div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="cheading">
+                <div><h3>Total Budget</h3></div>
+                <div class="selectbox">
+                    <select style="background-color: gray; border-radius: 5px; height: 25px;">
+                        <option>All Time</option>
+                        <option>Last 6 months</option>
+                        <option>Last year</option>
+                    </select>
+                </div>
+            </div>
+            <br><hr>
+            <div class="cbottom">
+                <div class="icon"></div>
+                <div class="balance" id="budget" name="budget"></div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="cheading">
+                <div><h3>Total Expense</h3></div>
+                <div class="selectbox">
+                    <select style="background-color: gray; border-radius: 5px;  height: 25px;">
+                        <option>All Time</option>
+                        <option>Last 6 months</option>
+                        <option>Last year</option>
+                    </select>
+                </div>
+            </div>
+            <br><hr>
+            <div class="cbottom">
+                <div class="icon"></div>
+                <div class="balance" id="expense" name="expense"></div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-container">
+        <div class="item1 g"></div>
+        <div class="item2 g"></div>
+        <div class="item3 g"></div>
+        <div class="item4 g"></div>
+    </div>
+</body>
+</html>
