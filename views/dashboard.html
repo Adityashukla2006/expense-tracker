@@ -58,6 +58,10 @@
             grid-column-end: 2;
             grid-row-start: 1;
             grid-row-end: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
         }
 
         .item2{ 
@@ -79,6 +83,9 @@
             grid-column-end: 4;
             grid-row-start: 1;
             grid-row-end: 3;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
         }
 
         .cheading{
@@ -112,20 +119,36 @@
             font-size: xx-large  ;
         }
 
+        .i{
+            width: 80%;
+            height: 10%;
+            margin: 0;
+            margin-left: 20px;
+        }
+        .piechart{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 70%;
+            margin-top: 20px;
+        }
+
+        table{
+            width: 100%;
+            height: 70%;
+        }
+
+        th{
+            font-size: x-large;
+        }
+        td{
+            text-align: center;
+            font-size: large;
+        }
     </style>
 </head>
-<script>
-    async function fetchData(){
-        const data = await fetch('http://localhost:3000/getdetails');
-        const adata= await data.json();
-        let pdata = Array.isArray(adata) ? adata[0] : adata;
-        
-        document.getElementById("budget").textContent= "$ "+pdata.budget;
-        document.getElementById("balance").textContent= "$ "+pdata.balance;
-        document.getElementById("expense").textContent= "$ "+pdata.expense;
-    }
-    window.onload=fetchData;
-</script>
+
 <body>
     <header class="header">
         <h1>FinanceFlow</h1>
@@ -184,10 +207,29 @@
         </div>
     </div>
     <div class="bottom-container">
-        <div class="item1 g"></div>
+        <div class="item1 g">
+            <div class="i" style="padding: 0;">
+                <h2 style="margin: 0;">Spending summary</h2>
+            </div>
+            <div class="piechart">
+                <canvas id="myPieChart"></canvas>
+            </div>
+        </div>
         <div class="item2 g"></div>
         <div class="item3 g"></div>
-        <div class="item4 g"></div>
+        <div class="item4 g">
+            <div style="margin-left: 20px; display: flex; justify-content: space-around;">
+                <div><h2>Recent Transaction</h2></div>
+                <div style="display: flex; justify-content: center; align-items: center;"><a href="/alltransactions">See all</a></div>
+            </div>
+            <div style="width: 100%; height: 60%;">
+                <table class="transactionsTable">
+
+                </table>
+            </div>
+        </div> 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/app.js"></script>
 </body>
 </html>

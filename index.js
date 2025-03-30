@@ -36,35 +36,51 @@ const details= new mongoose.Schema({
 const Details=mongoose.model('Details',details);
 
 const banking= new mongoose.Schema({
-    name: {type:String, required: true},
+    username: {type:String, unique:true, required: true},
     budget:{type: Number, required: true},
     expense:{type:Number, required: true},
-    balance:{type:Number, required: true}
+    balance:{type:Number, required: true},
+    food:Number,
+    rent:Number,
+    transport:Number,
+    entertainment:Number,
+    others:Number,
 });
 
 const Banking=mongoose.model('Banking',banking);
+
+const transaction= new mongoose.Schema({
+    username:String,
+    item: String,
+    category:String,
+    cost: String,
+    Date: String,
+})
+
+const Transaction=mongoose.model('Transaction',transaction);
 
 app.get("/", async(req,res)=>{
     res.sendFile(__dirname+"/views/home.html");
 })
 
-app.get("/dashboard",async (req,res)=>{
-    const uname=req.query.name;
-    if(req.session.user){
-        res.sendFile(__dirname+"/views/dashboard.html");
+
+
+app.get("/home", (req, res) => {
+    if (!req.session.user) {
+        return res.redirect("/login"); 
     }
-    else{
-        req.session.user=uname;
-        res.sendFile(__dirname+"/views/dashboard.html");
-    }
-})
+    res.sendFile(__dirname + "/views/dashboard.html");
+});
+
+
 
 app.post("/setbudget",async (req,res)=>{
     const budg=req.query.budget;
     const uname=req.session.user;
+    console.log(uname);
     if(uname){
     const num=0;
-    const result=await Banking.insertOne({name:uname,expense:num,budget:budg,balance:budg});
+    const result=await Banking.insertOne({username:uname,expense:num,budget:budg,balance:budg});
     if(result){
         res.send("Budget set!");
     }
@@ -88,40 +104,69 @@ app.get("/login", (req,res)=>{
 })
 
 
-app.post("/submit",async (req,res)=>{
-    const uname=req.body.username;
-    const pass=req.body.password;
-    const fname=req.body.name;
-    const phonenum=req.body.phonenumber;
-    const emailadd=req.body.email;
-    const existingUser=await Details.findOne({username:uname});
-    if(existingUser){
-        res.redirect('/login');
-    }
-    else{
-        const newUser=new Details({username:uname,password:pass,name:fname,phoneno:phonenum,EmailAddress:emailadd});
+app.post("/submit", async (req, res) => {
+        const { username, password, name, phonenumber, email } = req.body;
+        const existingUser = await Details.findOne({ username });
+        if (existingUser) {
+            if (existingUser.password !== password) {
+                return res.redirect('/login');
+            }
+            req.session.user = existingUser.username;
+            return res.redirect("/home");
+        }
+
+        const newUser = new Details({
+            username,
+            password,
+            name,
+            phoneno: phonenumber,
+            EmailAddress: email
+        });
         await newUser.save();
-        res.redirect(`/dashboard?name=${fname}`);
-    }
-});
+        req.session.user = newUser.username;
+        res.redirect("/home");
+    });
+    
 
 app.post("/savetransaction",async (req,res)=>{
     const money=parseInt(req.query.cash);
-    const user= await Banking.find({name:req.session.user});
+    const itemm=req.query.item;
+    const cat=req.query.category;
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0"); 
+    const year = today.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+    const user= await Banking.findOne({username:req.session.user});
     if(user){
-        const result=await Banking.updateOne({name:req.session.user},{$inc:{balance:-money,expense:+money}});
-        res.send("Db updated!");    
+        const result=await Banking.updateOne({username:req.session.user},{$inc:{balance:-money,expense:money,[cat]:money}});
+        const result2 = await Transaction.create({
+            username: req.session.user,
+            item: itemm,
+            category: cat,
+            cost: money,
+            Date: formattedDate,
+        }); 
+        res.send("DB updated!");
     }
     else{
-        res.send("Session not found!");
+        res.send("Error!");
     }
-})
+});
 
 app.get("/getdetails", async (req,res) =>{
-    const user= await Banking.find({name:req.session.user});
+    const user= await Banking.find({username:req.session.user});
     res.json(user);
 }
 )
+
+app.get("/alltransactions", (req,res)=>{
+    res.sendFile(__dirname+"/views/transactions.html");
+})
+app.get("/getTransactions", async (req,res)=>{
+    const user=await Transaction.find({username:req.session.user});
+    res.json(user);
+})
 
 app.listen(3000,(req,res)=>{
     console.log("Listening on port 3000..");

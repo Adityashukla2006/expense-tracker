@@ -66,8 +66,8 @@
             margin: 5px;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centers the form content vertically */
-            align-items: center; /* Centers the form content horizontally */
+            justify-content: center;
+            align-items: center; 
             width: 100%;
         }
 
@@ -136,21 +136,21 @@
         <div class="right-section">
             <div class="item" style="text-align: center;"><h2>Login to your account</h2></div>
             <div class="item form-container">
-                <form>
+                <form method="post" action="/submit">
                     <table cellpadding="5">                      
                         <tr>
-                            <td>Email</td>
+                            <td>Username</td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <input type="text" placeholder="xyz@gmail.com">
+                                <input type="text" placeholder="Enter username" name="username">
                             </td>
                         </tr>
                         <tr>
                             <td>Password</td>
                         </tr>
                         <tr>
-                           <td colspan="2"> <input type="password" placeholder="Enter your password"> </td>
+                           <td colspan="2"> <input type="password" placeholder="Enter your password" name="password"> </td>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -162,7 +162,7 @@
                         <tr>
                             <td colspan="2" style="text-align: center; font-size: small; color: gray;">
                                 Don't Have An Account?
-                                <a href="./signup.html" style="color: turquoise;">Sign up</a>     
+                                <a href="./signup" style="color: turquoise;">Sign up</a>     
                             </td>
                         </tr>
                     </table>
