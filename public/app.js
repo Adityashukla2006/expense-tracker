@@ -6,36 +6,66 @@ async function fetchData(){
         document.getElementById("budget").textContent= "$ "+pdata.budget;
         document.getElementById("balance").textContent= "$ "+pdata.balance;
         document.getElementById("expense").textContent= "$ "+pdata.expense;
-        PieChart();
-        fetchTransactions();
-    }
+}
+
 
 window.onload=fetchData;
+let myChart; 
+async function PieChart() {
+    try {
+        const canvas = document.getElementById('myPieChart');
 
-async function PieChart(){
-const ctx= document.getElementById('myPieChart').getContext('2d');
-const data = await fetch('http://localhost:3000/getdetails');
-const adata= await data.json();
-let pdata = Array.isArray(adata) ? adata[0] : adata;
-new Chart(ctx,{
-    type:'pie',
-    data: {
-        labels:['Food','Rent','Transport','Entertainment','Saving'],
-        datasets:[{
-            data:[pdata.food,pdata.rent,pdata.transport,pdata.entertainment,pdata.saving],
-            backgroundColor:['#FF384','#36A2EB','#FFCE56','#4CAF50','#9966FF'],
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'bottom' 
-            }
+        if (!canvas) {
+            console.error("Canvas element not found!");
+            return;
         }
+
+        const ctx = canvas.getContext('2d');
+        if (Chart.getChart("myPieChart")) {
+            Chart.getChart("myPieChart").destroy();
+        }
+
+        const response = await fetch('http://localhost:3000/getdetails');
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        const adata = await response.json();
+        let pdata = Array.isArray(adata) ? adata[0] : adata;
+        console.log(pdata.entertainment);
+        const chartData = {
+            food: pdata.Food,
+            rent: pdata.Rent,
+            transport: pdata.Transport,
+            entertainment: pdata.Entertainment,
+            saving: pdata.Others
+        };
+
+
+        myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Food', 'Rent', 'Transport', 'Entertainment', 'Others'],
+                datasets: [{
+                    data: Object.values(chartData),
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#9966FF'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error("Error creating PieChart:", error);
     }
-});
 }
+
+document.addEventListener("DOMContentLoaded", PieChart);
+document.addEventListener("DOMContentLoaded", fetchTransactions);
+
+
 
 async function fetchTransactions(){
     const data = await fetch('http://localhost:3000/getTransactions');
@@ -59,4 +89,24 @@ async function fetchTransactions(){
         `;
         table.appendChild(row);
     });
+}
+
+async function setBudget(){
+    const budget= prompt("Enter your budget");
+    if (!budget || isNaN(budget) || budget <= 0) {
+        alert("Please enter a valid budget.");
+        return;
+    }
+    const response= await fetch("http://localhost:3000/setbudget",{
+        method: "POST",
+        headers: { 
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({budget})
+    });
+
+}
+
+function goToAddTran(){
+    window.location.href="/addtransaction";
 }

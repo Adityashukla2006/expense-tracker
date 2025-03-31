@@ -16,7 +16,8 @@
             background-size: cover;
             background-position: center;
             color: white;
-            height: 100vh;
+            height: 100%;
+            margin: 0;
         }
 
         .container{
@@ -44,8 +45,8 @@
             display: grid;
             gap: 20px;
             height: 60vh;
-            
-        }
+            margin-bottom: 50px;    
+        }   
 
         .g{
             background-color: #171A23;
@@ -57,32 +58,18 @@
             grid-column-start: 1;
             grid-column-end: 2;
             grid-row-start: 1;
-            grid-row-end: 3;
+            grid-row-end: 2.75;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-content: center;
         }
 
-        .item2{ 
-            grid-column-start: 2;
-            grid-column-end: 3;
-            grid-row-start: 1;
-            grid-row-end: 2;
-        }
-
-        .item3{
-            grid-column-start: 2;
-            grid-column-end: 3;
-            grid-row-start: 2;
-            grid-row-end: 3;
-        }
-
         .item4{
-            grid-column-start: 3;
+            grid-column-start: 2;
             grid-column-end: 4;
             grid-row-start: 1;
-            grid-row-end: 3;
+            grid-row-end: 2.75;
             display: flex;
             justify-content: space-around;
             flex-direction: column;
@@ -152,6 +139,7 @@
 <body>
     <header class="header">
         <h1>FinanceFlow</h1>
+        <a onclick="setBudget()">Set your budget</a>
     </header>
     <div class="container">
         <div class="item">
@@ -215,16 +203,16 @@
                 <canvas id="myPieChart"></canvas>
             </div>
         </div>
-        <div class="item2 g"></div>
-        <div class="item3 g"></div>
         <div class="item4 g">
             <div style="margin-left: 20px; display: flex; justify-content: space-around;">
                 <div><h2>Recent Transaction</h2></div>
+                <div>
+                    <button  onclick="goToAddTran()">Add Transaction</button>
+                </div>
                 <div style="display: flex; justify-content: center; align-items: center;"><a href="/alltransactions">See all</a></div>
             </div>
             <div style="width: 100%; height: 60%;">
                 <table class="transactionsTable">
-
                 </table>
             </div>
         </div> 

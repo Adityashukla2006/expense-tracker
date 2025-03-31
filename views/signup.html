@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Agdasima&display=swap" rel="stylesheet">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Document</title>
     <style>
         * {
@@ -64,8 +64,8 @@
             margin: 5px;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centers the form content vertically */
-            align-items: center; /* Centers the form content horizontally */
+            justify-content: center; 
+            align-items: center; 
             width: 100%;
         }
 
@@ -147,10 +147,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <input type="text" placeholder="First Name" name="name">
+                                <input type="text" placeholder="First Name" name="name" id="name">
                             </td>
                             <td>
-                                <input type="text" placeholder="Phone Number" name="phonenumber">
+                                <input type="text" placeholder="Phone Number" name="phonenumber" id="phonenumber">
                             </td>
                         </tr>
                         <tr>
@@ -158,7 +158,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <input type="text" placeholder="Username" name="username">
+                                <input type="text" placeholder="Username" name="username" id="username">
                             </td>
                         </tr>
                         <tr>
@@ -166,7 +166,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <input type="text" placeholder="Email" name="email">
+                                <input type="text" placeholder="Email" name="email" id="email">
                             </td>
                         </tr>
                         <tr>
@@ -179,7 +179,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <input type="submit" value="Sign Up">
+                                <input type="submit" value="Sign Up" id="signup">
                             </td>
                         </tr>
                     </table>
@@ -193,5 +193,45 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function(){
+            $("#signup").click(function(){
+                var usernamepattern=/^[0-9a-zA-Z_-]+$/;
+                var namepattern=/^[a-zA-Z]+$/;
+                var phonenumberpattern=/^[0-9]{10}$/;
+                var emailpattern=/^[0-9A0Za-z+._%-]+@[a-zA-Z0-9._]+\.[a-zA-Z]{2,}$/;
+                var username=$("#username").val();
+                var name=$("#name").val();
+                var phonenumber=$("#phonenumber").val();
+                var email=$("#email").val();
+
+                if(!name.match(namepattern)){
+                    alert("Invalid name. Only letters allowed");
+                    $("#name").focus();
+                    return false;
+                }
+                else if(!phonenumber.match(phonenumberpattern)){
+                    alert("Invalid mobile number!");
+                    $("#phonenumber").focus();
+                    return false;
+                }
+                else if(!username.match(usernamepattern)){
+                    alert("Invalid username. Can only contain letters, hypens and underscores!");
+                    $("#username").focus();
+                    return false;
+                }
+                else if(!email.match(emailpattern)){
+                    alert("Invalid email address!");
+                    $("#email").focus();
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            })
+            
+        })
+        
+    </script>
 </body>
 </html>

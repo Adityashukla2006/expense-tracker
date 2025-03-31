@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            background-image: url('/images/image\ 11.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            height: 100vh;
+            margin: 0;
+        }
+
+        header{
+            position: static;
+            top: 0;
+            left: 0;
+            margin-bottom: 80px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .container{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 0 auto;
+            width: 30%;
+            height: 60%;
+            background-color: #171A23;
+            border: 2px solid white;
+            border-radius: 10px;
+        }
+
+        table{
+            height: 60%;
+            width: 100%;
+        }
+
+        .item{
+            width: 100%;
+            height: 50%;
+            margin: 20px;
+        }
+
+        input, select {
+            width: 80%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #A0A0A0;
+            margin: 10px    ;
+        }
+
+        label{
+            font-size: 20px;
+            margin: 10px;
+        }        
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div><h1 style="margin: 0;">FinanceFlow</h1></div>
+        <div>
+            <a href="/home"><img src="/images/image 47.png"></a>
+            <a href="/profile"><img src="/images/Group 11.png"></a></div>
+    </header>
+    <form method="post" action="/savetransaction">
+    <div class="container">
+        <div style="margin-left: 10px;"><h2>Add Transactions</h2></div>
+        
+            <div class="item">
+                <label for="item">Item</label><br>
+                <input type="text" name="item" placeholder="Enter item">
+            </div>
+            <div class="item">
+                <label for="category">Category</label><br>
+                <select name="category">
+                    <option>Food</option>
+                    <option>Rent</option>
+                    <option>Entertainment</option>
+                    <option>Transport</option>
+                    <option>Others</option>
+                </select>
+            </div>
+            <div class="item">
+                <label for="amount">Amount</label><br>
+                <input type="number" name="cash">
+            </div>
+            <div class="item">
+                <input type="submit" value="Add Transaction">
+            </div>
+    </div>
+    </form>
+</body>
+</html>

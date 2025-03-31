@@ -7,7 +7,7 @@ const path=require("path");
 const app = express();
 
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use(express.json());
 app.use(BodyParser.urlencoded({extended :true}));
 app.use(express.urlencoded({extended:true}));
 app.use(session({
@@ -40,11 +40,11 @@ const banking= new mongoose.Schema({
     budget:{type: Number, required: true},
     expense:{type:Number, required: true},
     balance:{type:Number, required: true},
-    food:Number,
-    rent:Number,
-    transport:Number,
-    entertainment:Number,
-    others:Number,
+    Food:Number,
+    Rent:Number,
+    Transport:Number,
+    Entertainment:Number,
+    Others:Number,
 });
 
 const Banking=mongoose.model('Banking',banking);
@@ -75,24 +75,31 @@ app.get("/home", (req, res) => {
 
 
 app.post("/setbudget",async (req,res)=>{
-    const budg=req.query.budget;
+    const budg=req.body.budget;
     const uname=req.session.user;
     console.log(uname);
     if(uname){
     const num=0;
+    const response=await Banking.findOne({username:uname});
+    if(response){
+        const result=await Banking.updateOne({username:uname},{$inc:{budget:budg,balance:budg}});
+    }
+    else{
     const result=await Banking.insertOne({username:uname,expense:num,budget:budg,balance:budg});
-    if(result){
-        res.send("Budget set!");
     }
 }
 else{
-    res.send("Session does not exist");
+    res.json({message:"Error"});
 }
 })
 
 app.get("/logout",(req,res)=>{
     req.session.destroy();
     res.send("Logged out succesfully!");    
+})
+
+app.get("/addtransaction",(req,res)=>{
+    res.sendFile(__dirname+"/views/addtransaction.html");
 })
 
 app.get("/signup",(req,res)=>{
@@ -108,9 +115,6 @@ app.post("/submit", async (req, res) => {
         const { username, password, name, phonenumber, email } = req.body;
         const existingUser = await Details.findOne({ username });
         if (existingUser) {
-            if (existingUser.password !== password) {
-                return res.redirect('/login');
-            }
             req.session.user = existingUser.username;
             return res.redirect("/home");
         }
@@ -124,14 +128,15 @@ app.post("/submit", async (req, res) => {
         });
         await newUser.save();
         req.session.user = newUser.username;
-        res.redirect("/home");
-    });
+        res.redirect("/home");       
+});
     
 
 app.post("/savetransaction",async (req,res)=>{
-    const money=parseInt(req.query.cash);
-    const itemm=req.query.item;
-    const cat=req.query.category;
+    const money=parseInt(req.body.cash);
+    const itemm=req.body.item;
+    const cat=req.body.category;
+    console.log(cat);
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
     const month = String(today.getMonth() + 1).padStart(2, "0"); 
@@ -147,10 +152,10 @@ app.post("/savetransaction",async (req,res)=>{
             cost: money,
             Date: formattedDate,
         }); 
-        res.send("DB updated!");
+        res.redirect("/home");
     }
     else{
-        res.send("Error!");
+        res.json({message:"Error!"});
     }
 });
 
