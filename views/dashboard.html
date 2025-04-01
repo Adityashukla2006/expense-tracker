@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
         }
 
         body{
@@ -39,6 +44,16 @@
             top: 0;
             left: 0;
             margin-bottom: 80px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        a{
+            margin: 20px;
+        }
+
+        h2{
+            font-size: 1.75em;
         }
 
         .bottom-container{
@@ -61,8 +76,16 @@
             grid-row-end: 2.75;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-content: center;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        button{
+            background-color: #00E5B7;
+            border-radius: 10px;
+            height: 45px;
+            width: 140px;
+            
         }
 
         .item4{
@@ -71,8 +94,8 @@
             grid-row-start: 1;
             grid-row-end: 2.75;
             display: flex;
-            justify-content: space-around;
             flex-direction: column;
+            align-items: center;
         }
 
         .cheading{
@@ -82,7 +105,7 @@
             width: 100%;
         }
 
-        .selectbox{
+        .selectbox{ 
             margin: 1em;
         }
 
@@ -92,6 +115,10 @@
             background-color: #0f252f;
             border-radius: 10px;
             margin: 1em;
+            background-color: #0f252f; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .cbottom{
@@ -102,15 +129,15 @@
         }
 
         .balance{
-            margin: 0.75em;
+            margin-top: 0.5em;
             font-size: xx-large  ;
         }
 
         .i{
             width: 80%;
-            height: 10%;
-            margin: 0;
-            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
         }
         .piechart{
             display: flex;
@@ -123,15 +150,26 @@
 
         table{
             width: 100%;
-            height: 70%;
+            height: 20%;
         }
 
         th{
-            font-size: x-large;
+            font-size: 25px;
+            padding: 5px 10px;
+            margin: 0;
         }
         td{
             text-align: center;
-            font-size: large;
+            padding: 30px;
+            font-size: 18px;
+        }
+
+        .recent-transaction{
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            margin-top: 6px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -139,7 +177,11 @@
 <body>
     <header class="header">
         <h1>FinanceFlow</h1>
-        <a onclick="setBudget()">Set your budget</a>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button onclick="setBudget()">Set your budget</button>    
+            <img src="/images/Group 11.png">
+        </div>
+        
     </header>
     <div class="container">
         <div class="item">
@@ -155,8 +197,10 @@
             </div>
             <br><hr>
             <div class="cbottom">
-                <div class="icon"></div>
-                <div class="balance" id="balance" name="balance"></div>
+                <div class="icon">
+                    <div><img src="images/wallet-3.png"></div>
+                </div>
+                <div class="balance" id="balance" name="balance">₹ 0</div>
             </div>
         </div>
         <div class="item">
@@ -172,8 +216,12 @@
             </div>
             <br><hr>
             <div class="cbottom">
-                <div class="icon"></div>
-                <div class="balance" id="budget" name="budget"></div>
+                <div class="icon">
+                    <div>
+                        <img src="/images/wallet.png">
+                    </div>
+                </div>
+                <div class="balance" id="budget" name="budget">₹ 0</div>
             </div>
         </div>
         <div class="item">
@@ -189,8 +237,12 @@
             </div>
             <br><hr>
             <div class="cbottom">
-                <div class="icon"></div>
-                <div class="balance" id="expense" name="expense"></div>
+                <div class="icon">
+                    <div>
+                        <img src="/images/card.png">
+                    </div>
+                </div>
+                <div class="balance" id="expense" name="expense">₹ 0</div>
             </div>
         </div>
     </div>
@@ -204,15 +256,21 @@
             </div>
         </div>
         <div class="item4 g">
-            <div style="margin-left: 20px; display: flex; justify-content: space-around;">
-                <div><h2>Recent Transaction</h2></div>
-                <div>
+            <div class="recent-transaction">
+                <div><h2 style="margin-bottom: 10px;">Recent Transaction</h2></div>
+                <div style="display: flex; align-items: center; justify-content: center;">
                     <button  onclick="goToAddTran()">Add Transaction</button>
-                </div>
-                <div style="display: flex; justify-content: center; align-items: center;"><a href="/alltransactions">See all</a></div>
+                    <div style="display: flex; justify-content: center; align-items: baseline;"><a href="/alltransactions">See all</a></div>
             </div>
+                </div>
             <div style="width: 100%; height: 60%;">
                 <table class="transactionsTable">
+                    <tr>
+                        <th>Item</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                    </tr>
                 </table>
             </div>
         </div> 

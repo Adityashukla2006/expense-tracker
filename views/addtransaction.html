@@ -64,7 +64,14 @@
         label{
             font-size: 20px;
             margin: 10px;
-        }        
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-left: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -74,17 +81,17 @@
             <a href="/home"><img src="/images/image 47.png"></a>
             <a href="/profile"><img src="/images/Group 11.png"></a></div>
     </header>
-    <form method="post" action="/savetransaction">
+    <form method="post" action="/savetransaction" id="transactionForm">
     <div class="container">
         <div style="margin-left: 10px;"><h2>Add Transactions</h2></div>
         
             <div class="item">
                 <label for="item">Item</label><br>
-                <input type="text" name="item" placeholder="Enter item">
+                <input type="text" name="item" id="item" placeholder="Enter item">
             </div>
             <div class="item">
                 <label for="category">Category</label><br>
-                <select name="category">
+                <select name="category" id="category">
                     <option>Food</option>
                     <option>Rent</option>
                     <option>Entertainment</option>
@@ -94,12 +101,89 @@
             </div>
             <div class="item">
                 <label for="amount">Amount</label><br>
-                <input type="number" name="cash">
+                <input type="number" name="cash" id="amount" min="0">
+                <div class="error-message" id="balanceError">This amount would make your balance negative.</div>
             </div>
             <div class="item">
                 <input type="submit" value="Add Transaction">
             </div>
     </div>
     </form>
+    <script>
+        let currentBalance = 0;
+
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const response = await fetch('/get-balance');
+        const data = await response.json();
+        if (data.balance !== undefined) {
+            currentBalance = data.balance;
+        }
+    } catch (error) {
+        console.error('Error fetching balance:', error);
+    }
+});
+
+document.getElementById('transactionForm').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent form submission initially
+    
+    // Ensure balance is fetched before proceeding
+    if (currentBalance === 0) {
+        try {
+            const response = await fetch('/get-balance');
+            const data = await response.json();
+            if (data.balance !== undefined) {
+                currentBalance = data.balance;
+            }
+        } catch (error) {
+            console.error('Error fetching balance:', error);
+        }
+    }
+    
+    const amountInput = document.getElementById('amount');
+    const amount = parseFloat(amountInput.value);
+    const balanceError = document.getElementById('balanceError');
+    
+    if (isNaN(amount) || amount <= 0) {
+        amountInput.setCustomValidity('Amount must be greater than 0');
+        return;
+    } else {
+        amountInput.setCustomValidity('');
+    }
+    
+    if (amount > currentBalance) {
+        balanceError.style.display = 'block';
+    } else {
+        balanceError.style.display = 'none';
+        event.target.submit(); // Only submit if validation passes
+    }
+});
+
+document.getElementById('amount').addEventListener('input', async function() {
+    // Ensure balance is fetched before validation
+    if (currentBalance === 0) {
+        try {
+            const response = await fetch('/get-balance');
+            const data = await response.json();
+            if (data.balance !== undefined) {
+                currentBalance = data.balance;
+            }
+        } catch (error) {
+            console.error('Error fetching balance:', error);
+        }
+    }
+    
+    const amountInput = document.getElementById('amount');
+    const amount = parseFloat(amountInput.value);
+    const balanceError = document.getElementById('balanceError');
+    
+    if (!isNaN(amount) && amount > currentBalance) {
+        balanceError.style.display = 'block';
+    } else {
+        balanceError.style.display = 'none';
+    }
+});
+    
+    </script>
 </body>
 </html>

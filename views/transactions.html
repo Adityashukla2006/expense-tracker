@@ -39,7 +39,7 @@
 
         table{
             width: 100%;
-            height: 60%;
+            height: 20%;
             border-collapse: collapse;
         }
 
@@ -50,6 +50,7 @@
         td{
             font-size: 20px;
             text-align: center;
+            padding: 15px;
         }
 
         img{
@@ -91,8 +92,47 @@
             <td>${element.category}</td>
             <td>${element.cost}</td>
             <td>${element.Date}</td>
+            <td><button class="delete-btn" data-id="${element._id}" onclick=deleteData() style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button></td>
         `;
         table.appendChild(row);
+    });
+}
+
+function deleteData() {
+    // Add event listeners to all delete buttons
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', async function() {
+            const id = this.getAttribute('data-id');
+            const row = this.closest('tr');
+            
+            try {
+                // Send delete request to your server
+                const response = await fetch(`/delete-transaction/${id}`, {
+                    method: 'DELETE',
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Remove the row from the table on success
+                    row.remove();
+                    
+                    // Optionally, update UI balance if displayed somewhere
+                    if (result.newBalance) {
+                        // Update balance display if you have an element for it
+                        const balanceElement = document.getElementById('current-balance');
+                        if (balanceElement) {
+                            balanceElement.textContent = result.newBalance;
+                        }
+                    }
+                } else {
+                    alert('Error deleting transaction: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error deleting transaction:', error);
+                alert('Error deleting transaction. Please try again.');
+            }
+        });
     });
 }
     </script>

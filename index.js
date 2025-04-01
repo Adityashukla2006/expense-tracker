@@ -35,16 +35,16 @@ const details= new mongoose.Schema({
 
 const Details=mongoose.model('Details',details);
 
-const banking= new mongoose.Schema({
-    username: {type:String, unique:true, required: true},
-    budget:{type: Number, required: true},
-    expense:{type:Number, required: true},
-    balance:{type:Number, required: true},
-    Food:Number,
-    Rent:Number,
-    Transport:Number,
-    Entertainment:Number,
-    Others:Number,
+const banking = new mongoose.Schema({
+    username: { type: String, unique: true, required: true },
+    budget: { type: Number, required: true, min: [0, 'Budget must be greater than 0'] },
+    expense: { type: Number, required: true, min: [0, 'Expense must be greater than 0'] },
+    balance: { type: Number, required: true, min: [0, 'Balance must be greater than 0'] },
+    Food: { type: Number, min: [0, 'Food expense cannot be negative'] }, 
+    Rent: { type: Number, min: [0, 'Rent expense cannot be negative'] }, 
+    Transport: { type: Number, min: [0, 'Transport expense cannot be negative'] },
+    Entertainment: { type: Number, min: [0, 'Entertainment expense cannot be negative'] }, 
+    Others: { type: Number, min: [0, 'Other expenses cannot be negative'] }, 
 });
 
 const Banking=mongoose.model('Banking',banking);
@@ -63,6 +63,24 @@ app.get("/", async(req,res)=>{
     res.sendFile(__dirname+"/views/home.html");
 })
 
+app.get("/get-balance", async (req, res) => {
+    if (!req.session || !req.session.user) {
+        return res.status(401).json({ message: "Unauthorized. User not logged in." });
+    }
+
+    try {
+        const result = await Banking.findOne({ username: req.session.user });
+
+        if (result && result.balance !== undefined) {
+            return res.json({ balance: result.balance });
+        } else {
+            return res.status(404).json({ message: "Balance not found." });
+        }
+    } catch (error) {
+        console.error("Error fetching balance:", error);
+        return res.status(500).json({ message: "Internal server error." });
+    }
+});
 
 
 app.get("/home", (req, res) => {
@@ -92,6 +110,7 @@ else{
     res.json({message:"Error"});
 }
 })
+
 
 app.get("/logout",(req,res)=>{
     req.session.destroy();
@@ -128,7 +147,7 @@ app.post("/submit", async (req, res) => {
         });
         await newUser.save();
         req.session.user = newUser.username;
-        res.redirect("/home");       
+        res.redirect("/login");       
 });
     
 
@@ -136,7 +155,7 @@ app.post("/savetransaction",async (req,res)=>{
     const money=parseInt(req.body.cash);
     const itemm=req.body.item;
     const cat=req.body.category;
-    console.log(cat);
+    console.log(req.session.user);
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
     const month = String(today.getMonth() + 1).padStart(2, "0"); 
@@ -155,7 +174,7 @@ app.post("/savetransaction",async (req,res)=>{
         res.redirect("/home");
     }
     else{
-        res.json({message:"Error!"});
+        res.json({message:"Budget not set or session not found!"});   
     }
 });
 
@@ -172,6 +191,40 @@ app.get("/getTransactions", async (req,res)=>{
     const user=await Transaction.find({username:req.session.user});
     res.json(user);
 })
+
+app.delete('/delete-transaction/:id', async (req, res) => {
+    try {
+        const transactionId = req.params.id;
+        const username = req.session.user;     
+        const transaction = await Transaction.findById(transactionId);
+        
+
+        const { cost, category } = transaction;
+        const bankingUpdate = await Banking.findOneAndUpdate(
+            { username: username },
+            { 
+                $inc: { 
+                    balance: cost,     
+                    expense: -cost,
+                    [category]:-cost,    
+                },
+               
+            }, 
+        );
+        
+        await Transaction.findByIdAndDelete(transactionId);
+        
+        res.json({ 
+            success: true, 
+            message: 'Transaction deleted successfully',
+            newBalance: bankingUpdate.balance
+        });
+        
+    } catch (error) {
+        console.error('Error deleting transaction:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
 
 app.listen(3000,(req,res)=>{
     console.log("Listening on port 3000..");

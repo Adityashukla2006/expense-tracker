@@ -185,9 +185,9 @@ body {
 }
 
 .icon{
-    background-color: #0f252f; /* Dark greenish tone */
+    background-color: #0f252f; 
     padding: 10px;
-    border-radius: 10px; /* Rounded icon background */
+    border-radius: 10px; 
     display: flex;
     align-items: center;
     justify-content: center;

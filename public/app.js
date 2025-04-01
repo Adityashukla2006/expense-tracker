@@ -3,13 +3,11 @@ async function fetchData(){
         const adata= await data.json();
         let pdata = Array.isArray(adata) ? adata[0] : adata;
         
-        document.getElementById("budget").textContent= "$ "+pdata.budget;
-        document.getElementById("balance").textContent= "$ "+pdata.balance;
-        document.getElementById("expense").textContent= "$ "+pdata.expense;
+        document.getElementById("budget").textContent= "₹ "+pdata.budget;
+        document.getElementById("balance").textContent= "₹ "+pdata.balance;
+        document.getElementById("expense").textContent= "₹ "+pdata.expense;
 }
 
-
-window.onload=fetchData;
 let myChart; 
 async function PieChart() {
     try {
@@ -62,6 +60,7 @@ async function PieChart() {
     }
 }
 
+document.addEventListener("DOMContentLoaded", fetchData);
 document.addEventListener("DOMContentLoaded", PieChart);
 document.addEventListener("DOMContentLoaded", fetchTransactions);
 
@@ -71,14 +70,6 @@ async function fetchTransactions(){
     const data = await fetch('http://localhost:3000/getTransactions');
     const pdata= await data.json();
     const table = document.querySelector(".transactionsTable");
-    table.innerHTML = `
-        <tr>
-            <th>Item</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Date</th>
-        </tr>
-    `;
     pdata.slice(0,4).forEach(function (element) {
         const row = document.createElement("tr");
         row.innerHTML = `
@@ -87,7 +78,7 @@ async function fetchTransactions(){
             <td>${element.cost}</td>
             <td>${element.Date}</td>
         `;
-        table.appendChild(row);
+        table.appendChild(row);   
     });
 }
 
@@ -104,9 +95,11 @@ async function setBudget(){
         },
         body:JSON.stringify({budget})
     });
-
+    alert("Budget set successfully!");
+    window.location.reload();
 }
 
 function goToAddTran(){
     window.location.href="/addtransaction";
 }
+
