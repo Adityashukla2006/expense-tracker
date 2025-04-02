@@ -187,6 +187,7 @@ app.get("/getdetails", async (req,res) =>{
 app.get("/alltransactions", (req,res)=>{
     res.sendFile(__dirname+"/views/transactions.html");
 })
+
 app.get("/getTransactions", async (req,res)=>{
     const user=await Transaction.find({username:req.session.user});
     res.json(user);
@@ -198,33 +199,47 @@ app.delete('/delete-transaction/:id', async (req, res) => {
         const username = req.session.user;     
         const transaction = await Transaction.findById(transactionId);
         
+        if (!transaction) {
+            return res.status(404).json({ success: false, message: "Transaction not found" });
+        }
 
         const { cost, category } = transaction;
-        const bankingUpdate = await Banking.findOneAndUpdate(
+
+        // Delete the transaction first
+        await Transaction.findByIdAndDelete(transactionId);
+
+        // Recalculate total expense from remaining transactions
+        const totalExpense = await Transaction.aggregate([
+            { $match: { username: username } },
+            { $group: { _id: null, total: { $sum: "$cost" } } }
+        ]);
+
+        const newExpense = totalExpense.length ? totalExpense[0].total : 0;
+
+        // Update Banking details with correct balance and recalculated expense
+        const updatedBanking = await Banking.findOneAndUpdate(
             { username: username },
             { 
-                $inc: { 
-                    balance: cost,     
-                    expense: -cost,
-                    [category]:-cost,    
-                },
-               
-            }, 
+                $inc: { balance: cost }, // Only update balance correctly
+                $set: { expense: newExpense } // ✅ Correct expense recalculation
+            },
+            { new: true }
         );
-        
-        await Transaction.findByIdAndDelete(transactionId);
-        
+
         res.json({ 
             success: true, 
             message: 'Transaction deleted successfully',
-            newBalance: bankingUpdate.balance
+            newBalance: updatedBanking.balance,
+            newExpense: updatedBanking.expense
         });
-        
+
     } catch (error) {
         console.error('Error deleting transaction:', error);
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });
+
+
 
 app.listen(3000,(req,res)=>{
     console.log("Listening on port 3000..");
