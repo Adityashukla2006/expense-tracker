@@ -6,6 +6,14 @@
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin: 0;
+            padding: 0;
+        }
         body{
             background-image: url('/images/image\ 11.png');
             background-repeat: no-repeat;
@@ -13,17 +21,7 @@
             background-position: center;
             color: white;
             height: 100vh;
-            font-family: 'Poppins', sans-serif;
         }
-        header{
-            position: static;
-            top: 0;
-            left: 0;
-            margin-bottom: 80px;
-            display: flex;
-            justify-content: space-between;
-        }
-
         .container{
             display: flex;
             justify-content: center;
@@ -59,15 +57,60 @@
             height: 80px;
             width: 71px;
         }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            padding-left: 25px;
+        }
+        .logo {
+            color: #00E5B7;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .sign-in, .get-started {
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        .sign-in img{
+            width: 85%;
+            height: 85%;
+        }
+
+        .get-started img{
+            width: 85%;
+            height: 85%;
+        }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div><h1 style="margin: 0;">FinanceFlow</h1></div>
-        <div>
-            <a href="/home"><img src="/images/image 47.png"></a>
-            <a href="/profile"><img src="/images/Group 11.png"></a></div>
-    </header>
+    <nav class="navbar">
+        <div class="logo">FinTrack</div>
+        <div class="auth-buttons">
+            <div></div>
+            <a class="sign-in" href="/home">
+                <img src="/images/image 55.png">
+            </a>
+            <a class="get-started" href="/logout">
+                <img src="/images/image 56.png">
+            </a>
+        </div>
+    </nav>
     <div class="container">
         <div class="sub-container">
             <table class="transactionsTable"></table>
@@ -101,14 +144,12 @@
 }
 
 function deleteData() {
-    // Add event listeners to all delete buttons
     document.querySelectorAll('.delete-btn').forEach(button => {
         button.addEventListener('click', async function() {
             const id = this.getAttribute('data-id');
             const row = this.closest('tr');
             
             try {
-                // Send delete request to your server
                 const response = await fetch(`/delete-transaction/${id}`, {
                     method: 'DELETE',
                 });

@@ -1,76 +1,74 @@
 const express = require('express');
-const mongoose= require('mongoose');
-const session=require('express-session');
-const BodyParser=require('body-parser');
+const mongoose = require('mongoose');
+const session = require('express-session');
+const BodyParser = require('body-parser');
 const { Db } = require('mongodb');
-const path=require("path");
+const path = require("path");
 const app = express();
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
-app.use(BodyParser.urlencoded({extended :true}));
-app.use(express.urlencoded({extended:true}));
+app.use(BodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(session({
-    secret:"okokokok",
-    saveUninitialized:false,
-    resave:false,
-    cookie:{
-        maxAge:60000*60*24,
+    secret: "okokokok",
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+        maxAge: 60000 * 60 * 24
     }
 }));
 
-mongoose.connect('mongodb://127.0.0.1:27017/credentials',{
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-}).then(()=>console.log("MongoDB connected!"))
-.catch((err)=>console.log("MongoDB connection error!"));
+mongoose.connect('mongodb://127.0.0.1:27017/credentials', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log("MongoDB connected!"))
+  .catch((err) => console.log("MongoDB connection error!"));
 
-const details= new mongoose.Schema({
-    username:{type:String, required:true, unique: true},
-    password:String,
-    name:String,
-    phoneno:Number,
-    EmailAddress:String
-})
+const details = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    password: String,
+    name: String,
+    phoneno: Number,
+    EmailAddress: String
+});
 
-const Details=mongoose.model('Details',details);
+const Details = mongoose.model('Details', details);
 
 const banking = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     budget: { type: Number, required: true, min: [0, 'Budget must be greater than 0'] },
     expense: { type: Number, required: true, min: [0, 'Expense must be greater than 0'] },
     balance: { type: Number, required: true, min: [0, 'Balance must be greater than 0'] },
-    Food: { type: Number, min: [0, 'Food expense cannot be negative'] }, 
-    Rent: { type: Number, min: [0, 'Rent expense cannot be negative'] }, 
+    Food: { type: Number, min: [0, 'Food expense cannot be negative'] },
+    Rent: { type: Number, min: [0, 'Rent expense cannot be negative'] },
     Transport: { type: Number, min: [0, 'Transport expense cannot be negative'] },
-    Entertainment: { type: Number, min: [0, 'Entertainment expense cannot be negative'] }, 
-    Others: { type: Number, min: [0, 'Other expenses cannot be negative'] }, 
+    Entertainment: { type: Number, min: [0, 'Entertainment expense cannot be negative'] },
+    Others: { type: Number, min: [0, 'Other expenses cannot be negative'] }
 });
 
-const Banking=mongoose.model('Banking',banking);
+const Banking = mongoose.model('Banking', banking);
 
-const transaction= new mongoose.Schema({
-    username:String,
+const transaction = new mongoose.Schema({
+    username: String,
     item: String,
-    category:String,
+    category: String,
     cost: String,
-    Date: String,
-})
+    Date: String
+});
 
-const Transaction=mongoose.model('Transaction',transaction);
+const Transaction = mongoose.model('Transaction', transaction);
 
-app.get("/", async(req,res)=>{
-    res.sendFile(__dirname+"/views/home.html");
-})
+app.get("/", async (req, res) => {
+    res.sendFile(__dirname + "/views/home.html");
+});
 
 app.get("/get-balance", async (req, res) => {
     if (!req.session || !req.session.user) {
         return res.status(401).json({ message: "Unauthorized. User not logged in." });
     }
-
     try {
         const result = await Banking.findOne({ username: req.session.user });
-
         if (result && result.balance !== undefined) {
             return res.json({ balance: result.balance });
         } else {
@@ -82,165 +80,180 @@ app.get("/get-balance", async (req, res) => {
     }
 });
 
-
 app.get("/home", (req, res) => {
     if (!req.session.user) {
-        return res.redirect("/login"); 
+        return res.redirect("/login");
     }
     res.sendFile(__dirname + "/views/dashboard.html");
 });
 
-
-
-app.post("/setbudget",async (req,res)=>{
-    const budg=req.body.budget;
-    const uname=req.session.user;
-    console.log(uname);
-    if(uname){
-    const num=0;
-    const response=await Banking.findOne({username:uname});
-    if(response){
-        const result=await Banking.updateOne({username:uname},{$inc:{budget:budg,balance:budg}});
+app.post("/setbudget", async (req, res) => {
+    const budg = req.body.budget;
+    const uname = req.session.user;
+    if (uname) {
+        const num = 0;
+        const response = await Banking.findOne({ username: uname });
+        if (response) {
+            await Banking.updateOne({ username: uname }, { $inc: { budget: budg, balance: budg } });
+        } else {
+            await Banking.insertOne({ username: uname, expense: num, budget: budg, balance: budg });
+        }
+    } else {
+        res.json({ message: "Error" });
     }
-    else{
-    const result=await Banking.insertOne({username:uname,expense:num,budget:budg,balance:budg});
-    }
-}
-else{
-    res.json({message:"Error"});
-}
-})
+});
 
-
-app.get("/logout",(req,res)=>{
+app.get("/logout", (req, res) => {
     req.session.destroy();
-    res.send("Logged out succesfully!");    
-})
+    res.redirect("/");
+});
 
-app.get("/addtransaction",(req,res)=>{
-    res.sendFile(__dirname+"/views/addtransaction.html");
-})
+app.get("/addtransaction", (req, res) => {
+    res.sendFile(__dirname + "/views/addtransaction.html");
+});
 
-app.get("/signup",(req,res)=>{
-    res.sendFile(__dirname+"/views/signup.html");
-})
+app.get("/signup", (req, res) => {
+    res.sendFile(__dirname + "/views/signup.html");
+});
 
-app.get("/login", (req,res)=>{
-    res.sendFile(__dirname+"/views/login.html");
-})
+app.get("/login", (req, res) => {
+    res.sendFile(__dirname + "/views/login.html");
+});
 
+app.get("/features", (req, res) => {
+    res.sendFile(__dirname + "/views/features.html");
+});
+
+app.get("/aboutus", (req, res) => {
+    res.sendFile(__dirname + "/views/aboutUs.html");
+});
+
+app.get("/pricing", (req, res) => {
+    res.sendFile(__dirname + "/views/price.html");
+});
 
 app.post("/submit", async (req, res) => {
-        const { username, password, name, phonenumber, email } = req.body;
-        const existingUser = await Details.findOne({ username });
-        if (existingUser) {
-            req.session.user = existingUser.username;
-            return res.redirect("/home");
-        }
-
-        const newUser = new Details({
-            username,
-            password,
-            name,
-            phoneno: phonenumber,
-            EmailAddress: email
-        });
-        await newUser.save();
-        req.session.user = newUser.username;
-        res.redirect("/login");       
+    const { username, password, name, phonenumber, email } = req.body;
+    const existingUser = await Details.findOne({ username });
+    if (existingUser) {
+        req.session.user = existingUser.username;
+        return res.redirect("/home");
+    }
+    const newUser = new Details({
+        username,
+        password,
+        name,
+        phoneno: phonenumber,
+        EmailAddress: email
+    });
+    await newUser.save();
+    req.session.user = newUser.username;
+    res.redirect("/login");
 });
-    
 
-app.post("/savetransaction",async (req,res)=>{
-    const money=parseInt(req.body.cash);
-    const itemm=req.body.item;
-    const cat=req.body.category;
-    console.log(req.session.user);
+app.post("/savetransaction", async (req, res) => {
+    const money = parseInt(req.body.cash);
+    const itemm = req.body.item;
+    const cat = req.body.category;
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
-    const month = String(today.getMonth() + 1).padStart(2, "0"); 
+    const month = String(today.getMonth() + 1).padStart(2, "0");
     const year = today.getFullYear();
     const formattedDate = `${day}-${month}-${year}`;
-    const user= await Banking.findOne({username:req.session.user});
-    if(user){
-        const result=await Banking.updateOne({username:req.session.user},{$inc:{balance:-money,expense:money,[cat]:money}});
-        const result2 = await Transaction.create({
+    const user = await Banking.findOne({ username: req.session.user });
+    if (user) {
+        await Banking.updateOne({ username: req.session.user }, { $inc: { balance: -money, expense: money, [cat]: money } });
+        await Transaction.create({
             username: req.session.user,
             item: itemm,
             category: cat,
             cost: money,
-            Date: formattedDate,
-        }); 
+            Date: formattedDate
+        });
         res.redirect("/home");
-    }
-    else{
-        res.json({message:"Budget not set or session not found!"});   
+    } else {
+        res.json({ message: "Budget not set or session not found!" });
     }
 });
 
-app.get("/getdetails", async (req,res) =>{
-    const user= await Banking.find({username:req.session.user});
+app.get("/getdetails", async (req, res) => {
+    const user = await Banking.find({ username: req.session.user });
     res.json(user);
-}
-)
+});
 
-app.get("/alltransactions", (req,res)=>{
-    res.sendFile(__dirname+"/views/transactions.html");
-})
+app.get("/alltransactions", (req, res) => {
+    res.sendFile(__dirname + "/views/transactions.html");
+});
 
-app.get("/getTransactions", async (req,res)=>{
-    const user=await Transaction.find({username:req.session.user});
+app.get("/getTransactions", async (req, res) => {
+    const user = await Transaction.find({ username: req.session.user });
     res.json(user);
-})
+});
 
 app.delete('/delete-transaction/:id', async (req, res) => {
     try {
         const transactionId = req.params.id;
-        const username = req.session.user;     
+        const username = req.session.user;
+        if (!username) {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
         const transaction = await Transaction.findById(transactionId);
-        
         if (!transaction) {
             return res.status(404).json({ success: false, message: "Transaction not found" });
         }
-
         const { cost, category } = transaction;
-
-        // Delete the transaction first
         await Transaction.findByIdAndDelete(transactionId);
-
-        // Recalculate total expense from remaining transactions
+        const banking = await Banking.findOne({ username });
         const totalExpense = await Transaction.aggregate([
-            { $match: { username: username } },
+            { $match: { username } },
             { $group: { _id: null, total: { $sum: "$cost" } } }
         ]);
-
         const newExpense = totalExpense.length ? totalExpense[0].total : 0;
-
-        // Update Banking details with correct balance and recalculated expense
+        const updatedCategoryValue = Math.max((banking[category] || 0) - Number(cost), 0);
         const updatedBanking = await Banking.findOneAndUpdate(
-            { username: username },
-            { 
-                $inc: { balance: cost }, // Only update balance correctly
-                $set: { expense: newExpense } // ✅ Correct expense recalculation
+            { username },
+            {
+                $set: {
+                    expense: newExpense,
+                    balance: banking.balance + Number(cost),
+                    [category]: updatedCategoryValue
+                }
             },
             { new: true }
         );
-
-        res.json({ 
-            success: true, 
+        if (!updatedBanking) {
+            return res.status(404).json({ success: false, message: 'Banking details not found' });
+        }
+        res.json({
+            success: true,
             message: 'Transaction deleted successfully',
             newBalance: updatedBanking.balance,
             newExpense: updatedBanking.expense
         });
-
     } catch (error) {
         console.error('Error deleting transaction:', error);
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });
 
+app.post("/resetBudget", async (req, res) => {
+    await Banking.updateOne(
+        { username: req.session.user },
+        {
+            $set: {
+                budget: 0,
+                balance: 0,
+                expense: 0,
+                Food: 0,
+                Transport: 0,
+                Entertainment: 0,
+                Rent: 0,
+                Others: 0
+            }
+        }
+    );
+});
 
-
-app.listen(3000,(req,res)=>{
+app.listen(3000, () => {
     console.log("Listening on port 3000..");
 });

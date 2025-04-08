@@ -23,11 +23,12 @@
             color: white;
             height: 100%;
             margin: 0;
+            padding: 0;
         }
 
         .container{
             display:flex;
-            justify-content: space-around;
+            justify-content: space-evenly;
             margin-bottom: 20px;
         }
 
@@ -39,17 +40,9 @@
             border-radius: 10px;
         }
         
-        .header{
-            position: static;
-            top: 0;
-            left: 0;
-            margin-bottom: 80px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        a{
+        #allie{
             margin: 20px;
+            color: #00E5B7;
         }
 
         h2{
@@ -58,7 +51,7 @@
 
         .bottom-container{
             display: grid;
-            gap: 20px;
+            gap: 40px;
             height: 60vh;
             margin-bottom: 50px;    
         }   
@@ -78,6 +71,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
+            margin-left: 38px;
         }
 
         button{
@@ -96,6 +90,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-right: 35px;
         }
 
         .cheading{
@@ -171,24 +166,76 @@
             margin-top: 6px;
             margin-bottom: 10px;
         }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            padding-left: 25px;
+        }
+        .logo {
+            color: #00E5B7;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .sign-in, .get-started {
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        .sign-in img{
+            width: 85%;
+            height: 85%;
+        }
+
+        .get-started img{
+            width: 85%;
+            height: 85%;
+        }
+        button{
+            background-color: #00E5B7;
+            border-radius: 10px;
+            height: 45px;
+            width: 140px;
+            margin-right: 15px;
+        }
     </style>
 </head>
 
 <body>
-    <header class="header">
-        <h1>FinanceFlow</h1>
-        <div style="display: flex; justify-content: center; align-items: center;">
-            <button onclick="setBudget()">Set your budget</button>    
-            <img src="/images/Group 11.png">
+    <nav class="navbar">
+        <div class="logo">FinTrack</div>
+        <div class="auth-buttons">
+            <button onclick="resetBudget()">Reset budget</button>
+            <button onclick="setBudget()">Set your budget</button>
+            <a class="sign-in" href="/home">
+                <img src="/images/image 55.png">
+            </a>
+            <a class="get-started" href="/logout">
+                <img src="/images/image 56.png">
+            </a>
         </div>
-        
-    </header>
+    </nav>
+    <div id="spending-feedback"></div>
     <div class="container">
         <div class="item">
             <div class="cheading">
                 <div><h3>Total Balance</h3></div>
                 <div class="selectbox">
-                    <select style="background-color: gray; border-radius: 5px; height: 25px;">
+                    <select style="background-color: gray; border-radius: 5px; height: 25px; color: white; text-align: center;">
                         <option>All Time</option>
                         <option>Last 6 months</option>
                         <option>Last year</option>
@@ -207,7 +254,7 @@
             <div class="cheading">
                 <div><h3>Total Budget</h3></div>
                 <div class="selectbox">
-                    <select style="background-color: gray; border-radius: 5px; height: 25px;">
+                    <select style="background-color: gray; border-radius: 5px; height: 25px; color: white; text-align: center;">
                         <option>All Time</option>
                         <option>Last 6 months</option>
                         <option>Last year</option>
@@ -228,7 +275,7 @@
             <div class="cheading">
                 <div><h3>Total Expense</h3></div>
                 <div class="selectbox">
-                    <select style="background-color: gray; border-radius: 5px;  height: 25px;">
+                    <select style="background-color: gray; border-radius: 5px;  height: 25px; color: white; text-align: center;">
                         <option>All Time</option>
                         <option>Last 6 months</option>
                         <option>Last year</option>
@@ -260,7 +307,7 @@
                 <div><h2 style="margin-bottom: 10px;">Recent Transaction</h2></div>
                 <div style="display: flex; align-items: center; justify-content: center;">
                     <button  onclick="goToAddTran()">Add Transaction</button>
-                    <div style="display: flex; justify-content: center; align-items: baseline;"><a href="/alltransactions">See all</a></div>
+                    <div style="display: flex; justify-content: center; align-items: baseline;"><a href="/alltransactions" id="allie">See all</a></div>
             </div>
                 </div>
             <div style="width: 100%; height: 60%;">

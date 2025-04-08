@@ -10,6 +10,8 @@
         * {
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
         }
         .empty{
             width: 100%;
@@ -114,12 +116,25 @@
             top: 0;
             right: 0;
         }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            padding-left: 25px;
+        }
+        .logo {
+            color: #00E5B7;
+            font-size: 35px;
+            font-weight: bold;
+        }       
+        
     </style>
 </head>
 <body>
-    <h1>
-        FinanceFlow
-    </h1>
+    <nav class="navbar">
+        <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">FinTrack</a></div>
+    </nav>
     <div class="container">
         <div class="left-section">
             <div class="l-text">
