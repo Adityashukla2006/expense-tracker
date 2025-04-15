@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="finTrackApp">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -116,7 +117,7 @@
         }
     </style>
 </head>
-<body>
+<body ng-controller="TransactionController">
     <nav class="navbar">
         <div class="logo">FinTrack</div>
         <div class="auth-buttons">
@@ -128,17 +129,17 @@
             </a>
         </div>
     </nav>
-    <form method="post" action="/savetransaction" id="transactionForm">
+    <form method="post" action="/savetransaction" id="transactionForm" ng-submit="submitTransaction($event)">
     <div class="container">
         <div style="margin-left: 10px;"><h2>Add Transactions</h2></div>
         
             <div class="item">
                 <label for="item">Item</label><br>
-                <input type="text" name="item" id="item" placeholder="Enter item">
+                <input type="text" name="item" id="item" placeholder="Enter item" ng-model="transaction.item" required>
             </div>
             <div class="item">
                 <label for="category">Category</label><br>
-                <select name="category" id="category">
+                <select name="category" id="category" ng-model="transaction.category">
                     <option>Food</option>
                     <option>Rent</option>
                     <option>Entertainment</option>
@@ -148,91 +149,86 @@
             </div>
             <div class="item">
                 <label for="amount">Amount</label><br>
-                <input type="number" name="cash" id="amount" min="0">
-                <div class="error-message" id="balanceError">This amount would make your balance negative.</div>
+                <input type="number" name="cash" id="amount" min="0" ng-model="transaction.amount" ng-change="checkBalance()">
+                <div class="error-message" id="balanceError" ng-show="isBalanceNegative">This amount would make your balance negative.</div>
             </div>
             <div class="item">
-                <input type="submit" value="Add Transaction">
+                <input type="submit" value="Add Transaction" ng-disabled="isBalanceNegative || !transaction.amount || transaction.amount <= 0">
             </div>
     </div>
     </form>
+    
     <script>
-        let currentBalance = 0;
-
-document.addEventListener('DOMContentLoaded', async function() {
-    try {
-        const response = await fetch('/get-balance');
-        const data = await response.json();
-        if (data.balance !== undefined) {
-            currentBalance = data.balance;
-        }
-    } catch (error) {
-        console.error('Error fetching balance:', error);
-    }
-});
-
-document.getElementById('transactionForm').addEventListener('submit', async function(event) {
-    event.preventDefault(); // Prevent form submission initially
+        
+        var app = angular.module('finTrackApp', []);
+        
     
-    // Ensure balance is fetched before proceeding
-    if (currentBalance === 0) {
-        try {
-            const response = await fetch('/get-balance');
-            const data = await response.json();
-            if (data.balance !== undefined) {
-                currentBalance = data.balance;
-            }
-        } catch (error) {
-            console.error('Error fetching balance:', error);
-        }
-    }
-    
-    const amountInput = document.getElementById('amount');
-const amount = parseFloat(amountInput.value);
-const balanceError = document.getElementById('balanceError');
-
-if (isNaN(amount) || amount <= 0) {
-    amountInput.setCustomValidity('Amount must be greater than 0');
-    amountInput.reportValidity(); // 👈 show the tooltip immediately
-    return;
-} else {
-    amountInput.setCustomValidity('');
-}
-
-    
-    if (amount > currentBalance) {
-        balanceError.style.display = 'block';
-    } else {
-        balanceError.style.display = 'none';
-        event.target.submit(); // Only submit if validation passes
-    }
-});
-
-document.getElementById('amount').addEventListener('input', async function() {
-    // Ensure balance is fetched before validation
-    if (currentBalance === 0) {
-        try {
-            const response = await fetch('/get-balance');
-            const data = await response.json();
-            if (data.balance !== undefined) {
-                currentBalance = data.balance;
-            }
-        } catch (error) {
-            console.error('Error fetching balance:', error);
-        }
-    }
-    
-    const amountInput = document.getElementById('amount');
-    const amount = parseFloat(amountInput.value);
-    const balanceError = document.getElementById('balanceError');
-    
-    if (!isNaN(amount) && amount > currentBalance) {
-        balanceError.style.display = 'block';
-    } else {
-        balanceError.style.display = 'none';
-    }
-});
-    
+        app.controller('TransactionController', ['$scope', '$http', function($scope, $http) {
+        
+            $scope.transaction = {
+                item: '',
+                category: 'Food',
+                amount: null
+            };
+            
+        
+            $scope.currentBalance = 0;
+            $scope.isBalanceNegative = false;
+            
+            $scope.fetchBalance = function() {
+                $http.get('/get-balance')
+                    .then(function(response) {
+                        if (response.data.balance !== undefined) {
+                            $scope.currentBalance = response.data.balance;
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error('Error fetching balance:', error);
+                    });
+            };
+            
+        
+            $scope.checkBalance = function() {
+                if ($scope.currentBalance === 0) {
+                    $scope.fetchBalance();
+                }
+                
+                const amount = parseFloat($scope.transaction.amount);
+                if (!isNaN(amount) && amount > $scope.currentBalance) {
+                    $scope.isBalanceNegative = true;
+                } else {
+                    $scope.isBalanceNegative = false;
+                }
+            };
+            
+            
+            $scope.submitTransaction = function(event) {
+                event.preventDefault();
+                
+                if ($scope.currentBalance === 0) {
+                    $scope.fetchBalance();
+                }
+                
+                const amount = parseFloat($scope.transaction.amount);
+                
+                if (isNaN(amount) || amount <= 0) {
+                    document.getElementById('amount').setCustomValidity('Amount must be greater than 0');
+                    document.getElementById('amount').reportValidity();
+                    return;
+                } else {
+                    document.getElementById('amount').setCustomValidity('');
+                }
+                
+                if (amount > $scope.currentBalance) {
+                    $scope.isBalanceNegative = true;
+                } else {
+                    $scope.isBalanceNegative = false;
+                    document.getElementById('transactionForm').submit();
+                }
+            };
+            
+            $scope.fetchBalance();
+        }]);
     </script>
 </body>
 </html>

@@ -145,13 +145,13 @@
             </div>
             <div class="l-text" style="margin-top: 50px;">
                 <p style="font-weight: 700; font-size: 30px;">Don't have an account?</p>
-                <button style="background-color: turquoise; margin-top: 10px; width: 40%; height: 40px; border-radius: 10px;">Register Now</button>
+                <button style="background-color: turquoise; margin-top: 10px; width: 40%; height: 40px; border-radius: 10px;" onclick="gotosignup()">Register Now</button>
             </div>
         </div>
         <div class="right-section">
             <div class="item" style="text-align: center;"><h2>Login to your account</h2></div>
             <div class="item form-container">
-                <form method="post" action="/submit">
+                <form method="post" action="/loggedin">
                     <table cellpadding="5">                      
                         <tr>
                             <td>Username</td>
@@ -185,5 +185,10 @@
             </div>
         </div>
     </div>
+    <script>
+        function gotosignup(){
+            window.location.href="/loggedin";
+        }
+    </script>
 </body>
 </html>

@@ -5,6 +5,8 @@ const BodyParser = require('body-parser');
 const { Db } = require('mongodb');
 const path = require("path");
 const app = express();
+const cookieParser=require('cookie-parser');
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -14,7 +16,7 @@ app.use(session({
     secret: "okokokok",
     saveUninitialized: false,
     resave: false,
-    cookie: {
+    cookie: {   
         maxAge: 60000 * 60 * 24
     }
 }));
@@ -37,14 +39,14 @@ const Details = mongoose.model('Details', details);
 
 const banking = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
-    budget: { type: Number, required: true, min: [0, 'Budget must be greater than 0'] },
-    expense: { type: Number, required: true, min: [0, 'Expense must be greater than 0'] },
-    balance: { type: Number, required: true, min: [0, 'Balance must be greater than 0'] },
-    Food: { type: Number, min: [0, 'Food expense cannot be negative'] },
-    Rent: { type: Number, min: [0, 'Rent expense cannot be negative'] },
-    Transport: { type: Number, min: [0, 'Transport expense cannot be negative'] },
-    Entertainment: { type: Number, min: [0, 'Entertainment expense cannot be negative'] },
-    Others: { type: Number, min: [0, 'Other expenses cannot be negative'] }
+    budget: { type: Number, required: true },
+    expense: { type: Number, required: true  },
+    balance: { type: Number, required: true },
+    Food: { type: Number },
+    Rent: { type: Number },
+    Transport: { type: Number },
+    Entertainment: { type: Number },
+    Others: { type: Number }
 });
 
 const Banking = mongoose.model('Banking', banking);
@@ -132,23 +134,46 @@ app.get("/pricing", (req, res) => {
     res.sendFile(__dirname + "/views/price.html");
 });
 
+app.post("/loggedin", async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const existingUser = await Details.findOne({ username });
+
+        if (existingUser) {
+            req.session.user = existingUser.username;
+
+            res.cookie("welcomeMessage", `Welcome back, ${existingUser.name}!`, {
+                maxAge: 24 * 60 * 60 * 1000,
+                httpOnly: false
+            });
+
+            return res.redirect("/home");
+        } else {
+            return res.redirect("/signup");
+        }
+    } catch (error) {
+        console.error("Login error:", error);
+        return res.status(500).send("Server error");
+    }
+});
+
 app.post("/submit", async (req, res) => {
     const { username, password, name, phonenumber, email } = req.body;
     const existingUser = await Details.findOne({ username });
     if (existingUser) {
-        req.session.user = existingUser.username;
-        return res.redirect("/home");
+        return res.redirect("/login");
     }
     const newUser = new Details({
         username,
-        password,
+        password,   
         name,
         phoneno: phonenumber,
         EmailAddress: email
     });
     await newUser.save();
     req.session.user = newUser.username;
-    res.redirect("/login");
+    res.redirect("/home");
 });
 
 app.post("/savetransaction", async (req, res) => {
