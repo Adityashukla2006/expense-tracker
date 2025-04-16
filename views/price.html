@@ -6,12 +6,13 @@
     <title>FinTrack - Pricing</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
-         * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -21,34 +22,33 @@
             text-align: center;
         }
 
-        
         .hero {
             padding: 50px;
-            background: url('pricesBG.png') no-repeat center center/cover;
+            background: url('') no-repeat center center/cover;
             height: 250px;
         }
+
         .hero h1 {
             font-size: 50px;
-            margin-bottom: 10px;  
+            margin-bottom: 10px;
         }
+
         .hero p {
             font-size: 30px;
             color: #ccc;
         }
 
-        /* ✅ FIX: Ensure correct spacing & full width */
         .pricing-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 50px; /* Fix: Added proper spacing */
+            gap: 50px;
             padding: 50px;
             width: 100%;
-            max-width: 1200px; /* Ensures it doesn't stretch too much */
+            max-width: 1200px;
             margin: auto;
         }
-        
-        /* ✅ Fix: Ensure cards align properly */
+
         .pricing-card {
             background-color: #14273e;
             padding: 30px;
@@ -57,30 +57,35 @@
             text-align: center;
             box-shadow: 0 5px 15px rgba(0, 255, 204, 0.3);
             position: relative;
-            flex: 1; /* Ensures equal size */
+            flex: 1;
         }
 
         .pricing-card h3 {
             font-size: 1.5rem;
             margin-bottom: 10px;
         }
+
         .pricing-card p {
             font-size: 1rem;
             color: #bbb;
         }
+
         .pricing-card h2 {
             font-size: 2rem;
             margin: 20px 0;
         }
+
         .pricing-card ul {
             list-style: none;
             padding: 0;
             margin: 20px 0;
         }
+
         .pricing-card ul li {
             font-size: 1rem;
             margin-bottom: 10px;
         }
+
         .pricing-card button {
             background-color: #00ffcc;
             color: black;
@@ -90,9 +95,11 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
         .pro {
             border: 2px solid #00ffcc;
         }
+
         .popular {
             position: absolute;
             top: -10px;
@@ -104,58 +111,58 @@
             font-size: 1rem;
             border-radius: 5px;
         }
-        
-        /* ✅ Fix: Image Alignment */
+
         .pricing-card img {
-            width: 50px; 
+            width: 50px;
             height: auto;
             margin-bottom: 10px;
         }
+
         .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    padding-left: 25px;
-}
-.logo {
-    color: #00E5B7;
-    font-size: 35px;
-    font-weight: bold;
-}
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            padding-left: 25px;
+        }
 
-.nav-links {
-    display: flex;
-    gap: 20px;
-}
+        .logo {
+            color: #00E5B7;
+            font-size: 35px;
+            font-weight: bold;
+        }
 
-.nav-links a {
-    color: white;
-    text-decoration: none;
-}
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
 
-.auth-buttons {
-    display: flex;
-    gap: 10px;
-}
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
 
-.sign-in, .get-started {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-}
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
 
-.sign-in {
-    background-color: transparent;
-    border: 1px solid white;
-    color: white;
-}
+        .sign-in, .get-started {
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
 
-.get-started {
-    background-color: #00ffaa;
-    color: black;
-}
+        .sign-in {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+        }
 
+        .get-started {
+            background-color: #00ffaa;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -175,10 +182,8 @@
         <h1>Simple, Transparent Pricing</h1>
         <p>Choose the perfect plan for your financial journey</p>
     </section>
-    
     <section class="pricing-container">
         <div class="pricing-card basic">
-            <img src="./basicPricing.png" alt="Basic Icon">
             <h3>Basic</h3>
             <p>Perfect for individuals just starting their financial journey</p>
             <h2>$0 <span>/monthly</span></h2>
@@ -188,12 +193,10 @@
                 <li>✔ Basic financial reports</li>
                 <li>✔ Email support</li>
             </ul>
-            <button>Get started</button>
+            <button onclick="goToSignUp()">Get started</button>
         </div>
-
         <div class="pricing-card pro">
             <div class="popular">Most Popular</div>
-            <img src="./proPricing.png" alt="pro Icon">
             <h3>Pro</h3>
             <p>Ideal for professionals seeking advanced financial tools</p>
             <h2>$9.99 <span>/monthly</span></h2>
@@ -203,11 +206,9 @@
                 <li>✔ Priority support</li>
                 <li>✔ Custom categories</li>
             </ul>
-            <button>Get started</button>
+            <button onclick="goToSignUp()">Get started</button>
         </div>
-
         <div class="pricing-card enterprise">
-            <img src="./enterprisePricing.png" alt="enterprise Icon">
             <h3>Enterprise</h3>
             <p>For businesses and teams requiring comprehensive solutions</p>
             <h2>$29.9 <span>/monthly</span></h2>
@@ -217,16 +218,16 @@
                 <li>✔ Team collaboration</li>
                 <li>✔ Dedicated support</li>
             </ul>
-            <button>Get started</button>
+            <button onclick="goToSignUp()">Get started</button>
         </div>
     </section>
     <script>
-        function goToSignUp(){
-            window.location.href="/signup";
+        function goToSignUp() {
+            window.location.href = "/signup";
         }
 
-        function goToLogin(){
-            window.location.href="/login";
+        function goToLogin() {
+            window.location.href = "/login";
         }
     </script>
 </body>

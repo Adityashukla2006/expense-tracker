@@ -6,118 +6,116 @@
     <title>FinTrack</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
-         * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
         body {
-          font-family: 'Poppins', sans-serif;
-          margin: 0;
-          padding: 0;
-          background: linear-gradient(to right, #06161F, #09272D, #0A292F);
-          color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #06161F, #09272D, #0A292F);
+            color: #ffffff;
         }
         .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    padding-left: 25px;
-}
-.logo {
-    color: #00E5B7;
-    font-size: 35px;
-    font-weight: bold;
-}
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            padding-left: 25px;
+        }
+        .logo {
+            color: #00E5B7;
+            font-size: 35px;
+            font-weight: bold;
+        }
 
-.nav-links {
-    display: flex;
-    gap: 20px;
-}
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
 
-.nav-links a {
-    color: white;
-    text-decoration: none;
-}
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
 
-.auth-buttons {
-    display: flex;
-    gap: 10px;
-}
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
 
-.sign-in, .get-started {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-}
+        .sign-in, .get-started {
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
 
-.sign-in {
-    background-color: transparent;
-    border: 1px solid white;
-    color: white;
-}
+        .sign-in {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+        }
 
-.get-started {
-    background-color: #00ffaa;
-    color: black;
-}
+        .get-started {
+            background-color: #00ffaa;
+            color: black;
+        }
 
         .hero {
-          text-align: center;
-          padding: 50px;
-          height: 350px;
-          background: url('/images/features.png') no-repeat center center/cover;
-          font-size: 25px;
+            text-align: center;
+            padding: 50px;
+            height: 250px;
         }
 
         .features {
-          text-align: center;
-          padding: 50px;
+            text-align: center;
+            padding: 50px;
         }
 
         .feature-container {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 30px;
-          padding: 20px;
-          max-width: 900px;
-          margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .feature-box {
-          background: #09272D;
-          border-radius: 20px;
-          padding: 25px;
-          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-          color: white;
-          display: flex;
-          flex-direction: column;
-          text-align: left;
+            background: #09272D;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
         }
 
         .feature-header {
-          display: flex;
-          align-items: center;
-          gap: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .feature-header img {
-          width: 45px;
-          height: auto;
+            width: 45px;
+            height: auto;
         }
 
         .feature-box h3 {
-          margin: 0;
-          font-size: 20px;
-          color: #5eead4;
+            margin: 0;
+            font-size: 20px;
+            color: #5eead4;
         }
 
         .feature-box p {
-          font-size: 15px;
-          color: #b5c5d1;
-          margin-top: 12px;
+            font-size: 15px;
+            color: #b5c5d1;
+            margin-top: 12px;
         }
 
     </style>
@@ -136,43 +134,43 @@
             <a href="/login" class="get-started" onclick="goToSignUp()">Get Started</a>
         </div>
     </nav>
-    
+
     <section class="hero">
-        <h1>Take Control of Your Finances</h1>
-        <p>Smart tools to track, analyze, and optimize your financial life.</p>
+        <h1 style="font-size: 50px;">Take Control of Your Finances</h1>
+        <p style="font-size: 30px; color: #ccc;">Smart tools to track, analyze, and optimize your financial life.</p>
     </section>
-    
+
     <section class="features">
         <h2>Everything You Need to Succeed!</h2>
 
         <div class="feature-container">
             <div class="feature-box">
                 <div class="feature-header">
-                    <img src="/featureLogo1.png" alt="Income Icon">
+                    <img src="/images/image 17.png" alt="Income Icon">
                     <h3>Income & Expense Tracking</h3>
                 </div>
                 <p>Log transactions manually or sync with your bank for automatic updates. Categorize spending, set recurring transactions, and upload receipts.</p>
             </div>
-            
+
             <div class="feature-box">
                 <div class="feature-header">
-                    <img src="./featureLogo2.png" alt="Reports Icon">
+                    <img src="/images/image 19.png" alt="Reports Icon">
                     <h3>Detailed Reports & Analytics</h3>
                 </div>
                 <p>Analyze cash flow, spending habits, and trends with custom reports. Generate tax-ready documents and export your data effortlessly.</p>
             </div>
-            
+
             <div class="feature-box">
                 <div class="feature-header">
-                    <img src="./featureLogo3.png" alt="Savings Icon">
+                    <img src="/images/image 18.png" alt="Savings Icon">
                     <h3>Savings & Goal Tracker</h3>
                 </div>
                 <p>Define financial goals—whether it’s building an emergency fund, saving for a vacation, or making a big purchase.</p>
             </div>
-            
+
             <div class="feature-box">
                 <div class="feature-header">
-                    <img src="./featureLogo4.png" alt="Budgeting Icon">
+                    <img src="/images/image 20.png" alt="Budgeting Icon">
                     <h3>Smart Budgeting Tools</h3>
                 </div>
                 <p>Set personalized monthly or yearly budgets and get alerts when you're close to your spending limits. Stay on track effortlessly.</p>
@@ -189,4 +187,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
