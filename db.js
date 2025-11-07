@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
+//use to connect to DocumentDB
 
 // const encodedPassword = encodeURIComponent(process.env.DOCDB_PASSWORD);
 // const tlsFilePath = '/app/global-bundle.pem'; // path inside container
@@ -27,6 +28,8 @@ dotenv.config();
 //     process.exit(1);
 //   }
 // };
+
+//Use to connect to MongoDB
 
 const connectDB = async () =>{
   mongoose.connect(process.env.MONGODB_URI, {
