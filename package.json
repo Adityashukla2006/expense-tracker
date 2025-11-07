@@ -1,0 +1,32 @@
+{
+  "name": "web-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adityashukla2006/expense-tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adityashukla2006/expense-tracker/issues"
+  },
+  "homepage": "https://github.com/Adityashukla2006/expense-tracker#readme",
+  "description": "",
+  "dependencies": {
+    "aws": "^0.0.3-2",
+    "aws-sdk": "^2.1692.0",
+    "body-parser": "^2.2.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "mongoose": "^8.19.3",
+    "path": "^0.12.7"
+  }
+}

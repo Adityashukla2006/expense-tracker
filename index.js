@@ -1,14 +1,20 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const BodyParser = require('body-parser');
-const { Db } = require('mongodb');
-const path = require("path");
-const app = express();
-const cookieParser=require('cookie-parser');
-app.use(cookieParser());
+import express from 'express';
+import mongoose from 'mongoose';
+import session from 'express-session';
+import BodyParser from 'body-parser';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import connectDB from './db.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-app.use(express.static(path.join(__dirname, "public")));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const app = express();
+
+app.use(cookieParser());
+app.use(express.static(path.join(process.cwd(), 'public')));
 app.use(express.json());
 app.use(BodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
@@ -21,11 +27,7 @@ app.use(session({
     }
 }));
 
-mongoose.connect('mongodb://127.0.0.1:27017/credentials', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log("MongoDB connected!"))
-  .catch((err) => console.log("MongoDB connection error!"));
+connectDB()
 
 const details = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
